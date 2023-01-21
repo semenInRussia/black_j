@@ -36,7 +36,7 @@ def branches_for_one_hand(hand: Hand) -> list[Branch]:
     branches += [("Карту", [hit_to_hand(hand)])]
     branches += [("Хватит", [])]
 
-    if card_nominal(hand[0]) == card_nominal(hand[1]):
+    if len(hand) == 2 and card_nominal(hand[0]) == card_nominal(hand[1]):
         branches += [("Разбить руку на 2", split_hand(hand))]
 
     return branches
