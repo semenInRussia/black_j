@@ -22,7 +22,9 @@ def hit_to_hand(hand: Hand) -> Hand:
 
 # эта функция не проверяет, можно ли сделать сплит, она просто делает это
 def split_hand(hand: Hand) -> list[Hand]:
-    return [hand, hand]
+    card1 = hand[0]
+    card2 = hand[1]
+    return [[card1], [card2]]
 
 
 def is_win(hand: Hand) -> bool:
@@ -40,11 +42,10 @@ def print_hand(hand: Hand):
 
 
 def select_one_hand(hands: list[Hand]) -> Hand:
-    i = 1
-
     if not hands:
         surrender()
 
+    i = 1
     for hand in hands:
         print(f"{i}. ", end=" ")
         print_hand(hand)
