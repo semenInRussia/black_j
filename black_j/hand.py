@@ -1,8 +1,10 @@
-from .card import Card
-from .card import rand_card
-from .card import card_score
+from typing import Union
 
-Hand = list[Card]
+from black_j.card import Card
+from black_j.card import rand_card
+from black_j.card import card_score
+
+Hand = list[Union[Card, str]]
 
 
 def rand_start_hands() -> list[Hand]:
@@ -12,7 +14,8 @@ def rand_start_hands() -> list[Hand]:
 def hand_score(hand: Hand) -> int:
     score = 0
     for card in hand:
-        score += card_score(card, score)
+        if card != "surrender":
+            score += card_score(card, score)
     return score
 
 
@@ -27,7 +30,7 @@ def split_hand(hand: Hand) -> list[Hand]:
     return [[card1], [card2]]
 
 
-def is_win(hand: Hand) -> bool:
+def is_hand_win(hand: Hand) -> bool:
     return hand_score(hand) == 21
 
 
@@ -37,19 +40,45 @@ def is_hand_lose(hand: Hand) -> bool:
 
 def print_hand(hand: Hand):
     for card in hand:
-        print(card, end=" ")
+        if card != "surrender":
+            print(card, end=" ")
     print("=", hand_score(hand))
 
 
+def print_some_hands(hands: list[Hand]):
+    for i in range(1, len(hands)):
+        print(f" {i}. ", end=" ")
+        print_hand(hands[i])
+
+
+def sort_hands(hands: list[Hand]) -> list[Hand]:
+    active: list[Hand] = []
+    noactive: list[Hand] = []
+    for hand in hands:
+        if is_hand_lose(hand) or is_hand_win(hand):
+            noactive += [hand]
+        else:
+            active += [hand]
+    return active + noactive
+
+
 def select_one_hand(hands: list[Hand]) -> Hand:
-    if not hands:
-        surrender()
+    if len(hands) == 0:
+        return []
+    elif len(hands) == 1:
+        return hands[0]
+
+    hands = sort_hands(hands)
 
     i = 1
     for hand in hands:
-        print(f"{i}. ", end=" ")
-        print_hand(hand)
-        i += 1
+        if is_hand_lose(hand) or is_surrender_hand(hand):
+            print("- ", end="")
+            print_hand(hand)
+        else:
+            print(f"{i}. ", end="")
+            print_hand(hand)
+            i += 1
 
     print(" --- ")
     hand_n = int(input("Какую колоду? "))
@@ -60,6 +89,46 @@ def select_one_hand(hands: list[Hand]) -> Hand:
     hand_n -= 1
     return hands[hand_n]
 
-def surrender():
-    print("Пока, вы проиграли!")
-    exit()
+
+# чем больше тем лучше
+def hand_game_score(hand: Hand) -> int:
+    if is_hand_lose(hand):
+        return 21 - hand_score(hand)
+    else:
+        return hand_score(hand)
+
+
+def is_hand_better_then(it: Hand, other: Hand) -> bool:
+    it_score = hand_game_score(it)
+    other_score = hand_game_score(other)
+    return it_score > other_score
+
+
+def are_hands_the_same(it: Hand, other: Hand) -> bool:
+    it_score = hand_game_score(it)
+    other_score = hand_game_score(other)
+    return it_score == other_score
+
+
+def surrender_hand(hand: Hand) -> Hand:
+    return hand + ["surrender"]
+
+
+def is_surrender_hand(hand: Hand) -> bool:
+    return hand[-1] == "surrender"
+
+
+def is_hand_active(hand: Hand) -> bool:
+    return not (is_surrender_hand(hand) or is_hand_lose(hand))
+
+
+def is_hand_not_active(hand: Hand) -> bool:
+    return not is_hand_active(hand)
+
+
+
+def all_hands_are_surrender(hands: list[Hand]) -> bool:
+    for hand in hands:
+        if is_hand_active(hand):
+            return False
+    return True

@@ -1,12 +1,14 @@
 from typing import TypeVar
 
-from .card import card_nominal
+from black_j.card import card_nominal
 
-from .hand import Hand
-from .hand import select_one_hand
-from .hand import split_hand
-from .hand import hit_to_hand
-from .hand import is_hand_lose
+from black_j.hand import Hand
+from black_j.hand import select_one_hand
+from black_j.hand import split_hand
+from black_j.hand import surrender_hand
+from black_j.hand import hit_to_hand
+from black_j.hand import is_hand_lose
+from black_j.hand import is_surrender_hand
 
 
 T = TypeVar("T")
@@ -14,9 +16,6 @@ Branch = tuple[str, list[Hand]]
 
 
 def branches_for_some_hands(hands: list[Hand]) -> list[Branch]:
-    if not hands:
-        return []
-
     hand = select_one_hand(hands)
     hands.remove(hand)
 
@@ -31,12 +30,14 @@ def branches_for_some_hands(hands: list[Hand]) -> list[Branch]:
 
 
 def branches_for_one_hand(hand: Hand) -> list[Branch]:
-    if is_hand_lose(hand):
-        return [("Убрать руку", [])]
+    if is_surrender_hand(hand):
+        return [("Это не рабочая рука, ничо не делать", [hand])]
+    elif is_hand_lose(hand):
+        return [("Убрать руку", [surrender_hand(hand)])]
 
     branches: list[Branch] = []
     branches += [("Карту", [hit_to_hand(hand)])]
-    branches += [("Хватит", [])]
+    branches += [("Хватит", [surrender_hand(hand)])]
 
     if len(hand) == 2 and card_nominal(hand[0]) == card_nominal(hand[1]):
         branches += [("Разбить руку на 2", split_hand(hand))]
