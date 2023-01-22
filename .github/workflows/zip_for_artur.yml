@@ -23,4 +23,5 @@ jobs:
           automatic_release_tag: "latest"
           prerelease: true
           title: "Archive .zip"
-          files: *.zip
+          files: |
+            *.zip
