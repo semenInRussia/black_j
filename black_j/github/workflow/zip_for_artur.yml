@@ -1,0 +1,26 @@
+---
+name: "make_zip_for_artur"
+
+on:
+  push:
+    branches:
+      - "master"
+
+jobs:
+  pre-release:
+    name: "Pre Release"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      # ...
+      - name: "Make archive"
+        run: |
+          tar -x -f for_artur.zip black_j/ main.py
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Archive .zip"
+          files: *.zip
