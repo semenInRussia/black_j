@@ -1,5 +1,5 @@
 import random
-from typing import Union
+from typing import Deque, Union
 
 
 MAX_DIGIT_NOMINAL = 10

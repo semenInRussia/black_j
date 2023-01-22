@@ -8,7 +8,7 @@ from black_j.hand import print_hand
 from black_j.hand import print_some_hands
 from black_j.hand import is_hand_better_then
 from black_j.hand import Hand
-from black_j.hand import all_hands_are_surrender
+from black_j.hand import all_hands_disabled
 
 from black_j.card import rand_card
 
@@ -21,9 +21,11 @@ def play():
 
     while True:
         if len(hands) == 1:
+            print("> you взял карт:", end=" ")
             print_hand(hands[0])
 
-        if all_hands_are_surrender(hands):
+        if all_hands_disabled(hands):
+            print("> you остановили добор карт")
             break
 
         possible_actions = branches_for_some_hands(hands)
@@ -60,7 +62,7 @@ def play():
         print_hand(user_lose_hands[0])
     elif len(user_lose_hands) > 1:
         print("Ваши проигранные колоды:")
-        print_some_hands(user_win_hands)
+        print_some_hands(user_lose_hands)
 
     if len(user_lose_hands) < len(user_win_hands):
         print("В принципе вы выиграли")

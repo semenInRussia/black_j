@@ -2,13 +2,12 @@ from typing import TypeVar
 
 from black_j.card import card_nominal
 
-from black_j.hand import Hand
+from black_j.hand import Hand, is_hand_disabled
 from black_j.hand import select_one_hand
 from black_j.hand import split_hand
 from black_j.hand import surrender_hand
 from black_j.hand import hit_to_hand
 from black_j.hand import is_hand_lose
-from black_j.hand import is_surrender_hand
 
 
 T = TypeVar("T")
@@ -30,10 +29,8 @@ def branches_for_some_hands(hands: list[Hand]) -> list[Branch]:
 
 
 def branches_for_one_hand(hand: Hand) -> list[Branch]:
-    if is_surrender_hand(hand):
-        return [("Это не рабочая рука, ничо не делать", [hand])]
-    elif is_hand_lose(hand):
-        return [("Убрать руку", [surrender_hand(hand)])]
+    if is_hand_disabled(hand):
+        return [("Ничего не делать", [hand])]
 
     branches: list[Branch] = []
     branches += [("Карту", [hit_to_hand(hand)])]
@@ -57,7 +54,6 @@ def select_branch(branches: list[Branch]) -> Branch:
 
     print(" --- ")
     q = input("Что делать? ")
-
 
     if q == "win":
         print("Уго, поздравляю, вы выиграли!")

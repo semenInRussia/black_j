@@ -1,3 +1,4 @@
+from pickle import loads
 from typing import Union
 
 from black_j.card import Card
@@ -46,20 +47,20 @@ def print_hand(hand: Hand):
 
 
 def print_some_hands(hands: list[Hand]):
-    for i in range(1, len(hands)):
-        print(f" {i}. ", end=" ")
+    for i in range(len(hands)):
+        print(f" {i+1}. ", end=" ")
         print_hand(hands[i])
 
 
 def sort_hands(hands: list[Hand]) -> list[Hand]:
-    active: list[Hand] = []
-    noactive: list[Hand] = []
+    enabled: list[Hand] = []
+    disabled: list[Hand] = []
     for hand in hands:
-        if is_hand_lose(hand) or is_hand_win(hand):
-            noactive += [hand]
+        if is_hand_disabled(hand):
+            disabled += [hand]
         else:
-            active += [hand]
-    return active + noactive
+            enabled += [hand]
+    return enabled + disabled
 
 
 def select_one_hand(hands: list[Hand]) -> Hand:
@@ -72,7 +73,7 @@ def select_one_hand(hands: list[Hand]) -> Hand:
 
     i = 1
     for hand in hands:
-        if is_hand_lose(hand) or is_surrender_hand(hand):
+        if is_hand_disabled(hand):
             print("- ", end="")
             print_hand(hand)
         else:
@@ -118,17 +119,16 @@ def is_surrender_hand(hand: Hand) -> bool:
     return hand[-1] == "surrender"
 
 
-def is_hand_active(hand: Hand) -> bool:
-    return not (is_surrender_hand(hand) or is_hand_lose(hand))
+def is_hand_enabled(hand: Hand) -> bool:
+    return not is_hand_disabled(hand)
 
 
-def is_hand_not_active(hand: Hand) -> bool:
-    return not is_hand_active(hand)
+def is_hand_disabled(hand: Hand) -> bool:
+    return is_surrender_hand(hand) or is_hand_lose(hand) or is_hand_win(hand)
 
 
-
-def all_hands_are_surrender(hands: list[Hand]) -> bool:
+def all_hands_disabled(hands: list[Hand]) -> bool:
     for hand in hands:
-        if is_hand_active(hand):
+        if is_hand_enabled(hand):
             return False
     return True
