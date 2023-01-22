@@ -15,7 +15,7 @@ jobs:
       # ...
       - name: "Make archive"
         run: |
-          tar -x -f for_artur.zip black_j/ main.py
+          tar -c -f for_artur.zip black_j/ main.py
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
