@@ -12,7 +12,11 @@ jobs:
     runs-on: "ubuntu-latest"
 
     steps:
-      # ...
+      - uses: actions/checkout@v2
+      - name: "Make archive"
+        run: |
+          tar -c -f for_artur.zip black_j/ main.py
+
       - name: "Make archive"
         run: |
           tar -c -f for_artur.zip black_j/ main.py
