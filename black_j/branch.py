@@ -2,7 +2,7 @@ from typing import TypeVar
 
 from black_j.card import card_nominal
 
-from black_j.hand import Hand, is_hand_disabled
+from black_j.hand import is_hand_disabled
 from black_j.hand import select_one_hand
 from black_j.hand import split_hand
 from black_j.hand import surrender_hand
@@ -10,11 +10,7 @@ from black_j.hand import hit_to_hand
 from black_j.hand import is_hand_lose
 
 
-T = TypeVar("T")
-Branch = tuple[str, list[Hand]]
-
-
-def branches_for_some_hands(hands: list[Hand]) -> list[Branch]:
+def branches_for_some_hands(hands):
     hand = select_one_hand(hands)
     hands.remove(hand)
 
@@ -28,11 +24,11 @@ def branches_for_some_hands(hands: list[Hand]) -> list[Branch]:
     return branches
 
 
-def branches_for_one_hand(hand: Hand) -> list[Branch]:
+def branches_for_one_hand(hand):
     if is_hand_disabled(hand):
         return [("Ничего не делать", [hand])]
 
-    branches: list[Branch] = []
+    branches = []
     branches += [("Карту", [hit_to_hand(hand)])]
     branches += [("Хватит", [surrender_hand(hand)])]
 
@@ -42,7 +38,7 @@ def branches_for_one_hand(hand: Hand) -> list[Branch]:
     return branches
 
 
-def select_branch(branches: list[Branch]) -> Branch:
+def select_branch(branches):
     if len(branches) == 1:
         return branches[0]
 

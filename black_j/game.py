@@ -7,7 +7,6 @@ from black_j.hand import rand_start_hands
 from black_j.hand import print_hand
 from black_j.hand import print_some_hands
 from black_j.hand import is_hand_better_then
-from black_j.hand import Hand
 from black_j.hand import all_hands_disabled
 
 from black_j.card import rand_card
@@ -38,9 +37,9 @@ def play():
 
     print("> Считаем очки и выбираем победителя...")
 
-    user_win_hands: list[Hand] = []
-    user_lose_hands: list[Hand] = []
-    draw_hands: list[Hand] = []
+    user_win_hands = []
+    user_lose_hands = []
+    draw_hands = []
 
     for hand in hands:
         if are_hands_the_same(hand, dealer_hand):

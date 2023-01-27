@@ -1,5 +1,4 @@
 import random
-from typing import Deque, Union
 
 
 MAX_DIGIT_NOMINAL = 10
@@ -9,10 +8,8 @@ DIAMONDS = "/"
 CLUBS = "|"
 SPADES = "_"
 
-Card = str
 
-
-def rand_suit() -> str:
+def rand_suit():
     mouth = random.randint(1, 4)
     if mouth == 1:
         return DIAMONDS
@@ -27,7 +24,7 @@ def rand_suit() -> str:
         return ""
 
 
-def rand_nominal() -> str:
+def rand_nominal():
     n = random.randint(1, MAX_DIGIT_NOMINAL+3)
     if n == 1:
         return "A"
@@ -41,11 +38,11 @@ def rand_nominal() -> str:
         return str(n)
 
 
-def card_nominal(card: Card) -> str:
+def card_nominal(card):
     return card[:-1]
 
 
-def card_score(card: Card, score=0) -> int:
+def card_score(card, score=0):
     n = card_nominal(card)
     if n == "A" and score <= 10:
         return 11
@@ -57,14 +54,7 @@ def card_score(card: Card, score=0) -> int:
         return int(n)
 
 
-def rand_card() -> Card:
+def rand_card():
     nominal = rand_nominal()
     suit = rand_suit()
     return nominal + suit
-
-
-if __name__ == "__main__":
-    print(rand_card())
-    print(rand_card())
-    print(rand_card())
-    print(rand_card())
