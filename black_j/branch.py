@@ -1,16 +1,20 @@
-from typing import TypeVar
+import sys
 
-from black_j.card import card_nominal
+from black_j.hand import (
+    Hand,
+    hit_to_hand,
+    is_hand_can_be_splitted,
+    is_hand_disabled,
+    select_one_hand,
+    split_hand,
+    surrender_hand,
+)
 
-from black_j.hand import is_hand_disabled
-from black_j.hand import select_one_hand
-from black_j.hand import split_hand
-from black_j.hand import surrender_hand
-from black_j.hand import hit_to_hand
-from black_j.hand import is_hand_lose
+Branch = tuple[str, list[Hand]]
 
 
-def branches_for_some_hands(hands):
+def branches_for_some_hands(hands: list[Hand]) -> list[Branch]:
+    """Return list of possible branches for given card hands."""
     hand = select_one_hand(hands)
     hands.remove(hand)
 
@@ -24,7 +28,8 @@ def branches_for_some_hands(hands):
     return branches
 
 
-def branches_for_one_hand(hand):
+def branches_for_one_hand(hand: Hand) -> list[Branch]:
+    """Return branches of possible upgraded hands for a given hand."""
     if is_hand_disabled(hand):
         return [("Ничего не делать", [hand])]
 
@@ -32,13 +37,14 @@ def branches_for_one_hand(hand):
     branches += [("Карту", [hit_to_hand(hand)])]
     branches += [("Хватит", [surrender_hand(hand)])]
 
-    if len(hand) == 2 and card_nominal(hand[0]) == card_nominal(hand[1]):
+    if is_hand_can_be_splitted(hand):
         branches += [("Разбить руку на 2", split_hand(hand))]
 
     return branches
 
 
-def select_branch(branches):
+def select_branch(branches: list[Branch]) -> Branch:
+    """Select one of given branches asking from the user."""
     if len(branches) == 1:
         return branches[0]
 
@@ -46,14 +52,14 @@ def select_branch(branches):
     for branch in branches:
         print(f" {i}. ", end=" ")
         print(branch[0])
-        i +=  1
+        i += 1
 
     print(" --- ")
     q = input("Что делать? ")
 
     if q == "win":
         print("Уго, поздравляю, вы выиграли!")
-        exit()
+        sys.exit()
 
     action_n = int(q)
 

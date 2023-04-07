@@ -1,5 +1,6 @@
 import random
 
+Card = str
 
 MAX_DIGIT_NOMINAL = 10
 
@@ -8,53 +9,52 @@ DIAMONDS = "/"
 CLUBS = "|"
 SPADES = "_"
 
+Suit = HEARTS | DIAMONDS | CLUBS | SPADES
+Nominal = ("1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10"
+           | "A" | "Q" | "K")
 
-def rand_suit():
-    mouth = random.randint(1, 4)
-    if mouth == 1:
-        return DIAMONDS
-    elif mouth == 2:
-        return CLUBS
-    elif mouth == 3:
-        return SPADES
-    elif mouth == 4:
-        return HEARTS
-    else:
-        print("недолжно случится")
-        return ""
+def rand_suit() -> Suit:
+    """Return a random card suit (either Heart, Diamonds, Clubs or Spadeds)."""
+    mouth = random.randint(0, 3)
+    return [HEARTS, DIAMONDS, CLUBS, SPADES][mouth]
 
 
-def rand_nominal():
-    n = random.randint(1, MAX_DIGIT_NOMINAL+3)
+def rand_nominal() -> Nominal:
+    """Return a random card nominal."""
+    n = random.randint(1, MAX_DIGIT_NOMINAL + 3)
     if n == 1:
         return "A"
-    elif n == MAX_DIGIT_NOMINAL+1:
+    if n == MAX_DIGIT_NOMINAL + 1:
         return "J"
-    elif n == MAX_DIGIT_NOMINAL+2:
+    if n == MAX_DIGIT_NOMINAL + 2:
         return "Q"
-    elif n == MAX_DIGIT_NOMINAL+3:
+    if n == MAX_DIGIT_NOMINAL + 3:
         return "K"
-    else:
-        return str(n)
+    return str(n)
 
 
-def card_nominal(card):
+def card_nominal(card: Card) -> Nominal:
+    """Return the nominal of a given card."""
     return card[:-1]
 
 
-def card_score(card, score=0):
+def card_score(card: Card, score: int = 0) -> int:
+    """Return the score of a given card.
+
+    You should pass the already scored score
+    """
     n = card_nominal(card)
     if n == "A" and score <= 10:
         return 11
-    elif n == "A" and score > 10:
+    if n == "A" and score > 10:
         return 1
-    elif n == "Q" or n == "K" or n == "J":
+    if n == "Q" or n == "K" or n == "J":
         return 10
-    else:
-        return int(n)
+    return int(n)
 
 
-def rand_card():
+def rand_card() -> Card:
+    """Return a random card."""
     nominal = rand_nominal()
     suit = rand_suit()
     return nominal + suit

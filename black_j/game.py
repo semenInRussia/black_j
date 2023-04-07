@@ -1,18 +1,18 @@
-from black_j.branch import branches_for_some_hands
-from black_j.branch import select_branch
-from black_j.dealer import dealer_hand_play_out
-
-from black_j.hand import are_hands_the_same
-from black_j.hand import rand_start_hands
-from black_j.hand import print_hand
-from black_j.hand import print_some_hands
-from black_j.hand import is_hand_better_then
-from black_j.hand import all_hands_disabled
-
+from black_j.branch import branches_for_some_hands, select_branch
 from black_j.card import rand_card
+from black_j.dealer import dealer_hand_play_out
+from black_j.hand import (
+    all_hands_disabled,
+    are_hands_the_same,
+    is_hand_better_then,
+    print_hand,
+    print_some_hands,
+    rand_start_hands,
+)
 
 
-def play():
+def play() -> None:
+    """Run the game black jack."""
     dealer_hand = [rand_card()]
     print("> dealer взял пару карт:", end=" ")
     print_hand(dealer_hand)
