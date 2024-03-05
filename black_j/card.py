@@ -19,7 +19,6 @@ class Suit(Enum):
     def __add__(self, nom: Nominal) -> Card:
         return str(nom) + str(self)
 
->>>>>>> c04a5b5 (ddd)
 
 def rand_suit() -> Suit:
     """Return a random card suit (either Heart, Diamonds, Clubs or Spades)."""
