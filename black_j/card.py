@@ -9,9 +9,9 @@ DIAMONDS = "/"
 CLUBS = "|"
 SPADES = "_"
 
-Suit = HEARTS | DIAMONDS | CLUBS | SPADES
-Nominal = ("1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10"
-           | "A" | "Q" | "K")
+Suit = str
+Nominal = str
+
 
 def rand_suit() -> Suit:
     """Return a random card suit (either Heart, Diamonds, Clubs or Spadeds)."""
