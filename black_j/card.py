@@ -1,22 +1,29 @@
 import random
+from enum import Enum
 
 Card = str
 
 MAX_DIGIT_NOMINAL = 10
 
-HEARTS = "^"
-DIAMONDS = "/"
-CLUBS = "|"
-SPADES = "_"
 
-Suit = str
+# Nominal = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "A" | "Q" | "K"
 Nominal = str
 
 
+class Suit(Enum):
+    HEARTS = "^"
+    DIAMONDS = "/"
+    CLUBS = "|"
+    SPADES = "_"
+
+    def __add__(self, nom: Nominal) -> Card:
+        return str(nom) + str(self)
+
+>>>>>>> c04a5b5 (ddd)
+
 def rand_suit() -> Suit:
-    """Return a random card suit (either Heart, Diamonds, Clubs or Spadeds)."""
-    mouth = random.randint(0, 3)
-    return [HEARTS, DIAMONDS, CLUBS, SPADES][mouth]
+    """Return a random card suit (either Heart, Diamonds, Clubs or Spades)."""
+    return random.choice([Suit.HEARTS, Suit.DIAMONDS, Suit.CLUBS, Suit.SPADES])
 
 
 def rand_nominal() -> Nominal:
@@ -57,4 +64,4 @@ def rand_card() -> Card:
     """Return a random card."""
     nominal = rand_nominal()
     suit = rand_suit()
-    return nominal + suit
+    return suit + nominal

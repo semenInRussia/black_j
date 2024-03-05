@@ -153,7 +153,7 @@ def is_hand_disabled(hand: Hand) -> bool:
     return is_surrender_hand(hand) or is_hand_lose(hand) or is_hand_win(hand)
 
 
-def all_hands_disabled(hands: Hand) -> bool:
+def all_hands_disabled(hands: list[Hand]) -> bool:
     """Return True, if each of given hands can't be played further."""
     return all(not is_hand_enabled(hand) for hand in hands)
 

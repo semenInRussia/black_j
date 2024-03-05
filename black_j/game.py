@@ -1,3 +1,6 @@
+import random
+import time
+
 from black_j.branch import branches_for_some_hands, select_branch
 from black_j.card import rand_card
 from black_j.dealer import dealer_hand_play_out
@@ -11,19 +14,26 @@ from black_j.hand import (
 )
 
 
+def _sleep():
+    time.sleep(random.randint(1, 3))
+
+
 def play() -> None:
     """Run the game black jack."""
     dealer_hand = [rand_card()]
+    _sleep()
     print("> dealer взял пару карт:", end=" ")
     print_hand(dealer_hand)
     hands = rand_start_hands()
 
     while True:
         if len(hands) == 1:
+            _sleep()
             print("> you взял карт:", end=" ")
             print_hand(hands[0])
 
         if all_hands_disabled(hands):
+            _sleep()
             print("> you остановили добор карт")
             break
 
@@ -31,11 +41,14 @@ def play() -> None:
 
         _, hands = select_branch(possible_actions)
 
+    _sleep()
     print("> dealer сейчас доберёт пару карт...")
+    _sleep()
     dealer_hand = dealer_hand_play_out(dealer_hand)
     print_hand(dealer_hand)
 
     print("> Считаем очки и выбираем победителя...")
+    _sleep()
 
     user_win_hands = []
     user_lose_hands = []
@@ -43,11 +56,11 @@ def play() -> None:
 
     for hand in hands:
         if are_hands_the_same(hand, dealer_hand):
-            draw_hands += [hand]
+            draw_hands.append(hand)
         elif is_hand_better_then(hand, dealer_hand):
-            user_win_hands += [hand]
+            user_win_hands.append(hand)
         else:
-            user_lose_hands += [hand]
+            user_lose_hands.append(hand)
 
     if len(user_win_hands) == 1:
         print("Ваша выигрышная колода")
@@ -63,6 +76,7 @@ def play() -> None:
         print("Ваши проигранные колоды:")
         print_some_hands(user_lose_hands)
 
+    _sleep()
     if len(user_lose_hands) < len(user_win_hands):
         print("В принципе вы выиграли")
     elif len(user_lose_hands) > len(user_win_hands):

@@ -23,8 +23,8 @@ def branches_for_some_hands(hands: list[Hand]) -> list[Branch]:
 
     for hand_branch in hand_branches:
         branch_name, branch_hands = hand_branch
-        branches += [(branch_name, branch_hands + hands)]
-
+        branches.append((branch_name, branch_hands + hands))
+        
     return branches
 
 
@@ -33,12 +33,10 @@ def branches_for_one_hand(hand: Hand) -> list[Branch]:
     if is_hand_disabled(hand):
         return [("Ничего не делать", [hand])]
 
-    branches = []
-    branches += [("Карту", [hit_to_hand(hand)])]
-    branches += [("Хватит", [surrender_hand(hand)])]
+    branches = [("Карту", [hit_to_hand(hand)]), ("Хватит", [surrender_hand(hand)])]
 
     if is_hand_can_be_splitted(hand):
-        branches += [("Разбить руку на 2", split_hand(hand))]
+        branches.append(("Разбить руку на 2", split_hand(hand)))
 
     return branches
 

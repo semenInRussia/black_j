@@ -2,6 +2,7 @@ from black_j.hand import Hand, hand_score, hit_to_hand
 
 DEALER_HAND_LIMIT = 17
 
+
 def dealer_hand_play_out(hand: Hand) -> Hand:
     """Hand out a given hand to the end.
 
